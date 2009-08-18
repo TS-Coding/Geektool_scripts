@@ -27,40 +27,17 @@ temp_normal_proz=$(echo $proz | sed -e 's/%//;s/\..*//')
 normal_proz=$[$temp_normal_proz/10]
 
 #########################
-# RAM
+# DISPLAY CPU BAR
 #########################
 
-ram_used=$(top -l 1 | grep 'Phys' | sed -e 's/.*inactive, //;s/M.*//')
-ram_uused=$(top -l 1 | grep 'Phys' | sed -e 's/.*used, //;s/M.*//')
-
-#ram_ges=$[$ram_used+$ram_uused]
-ram_ges=$(system_profiler | grep "Memory: ")
-normal_ram=$[$ram_used/200]
-
-#########################
-# DIAGRAM
-#########################
-
-function displayDia() {
+function displayCPU() {
 	
-	#CPU or RAM
-	component=$1
-	
-	if [ $component = 1 ]
-		then
-			glob=$normal_proz		
-		else
-			glob=$normal_ram			
-	fi
-
-# Displaying CPU/MEM Bars
-	
-	for ((i=1; $i <= $glob; i++))
+	for ((i=1; $i <= $normal_proz; i++))
 		do
 			balken=$balken"$zeichen"
 	done
 
-	for ((i=$glob; $i < 10; i++))
+	for ((i=$normal_proz; $i < 10; i++))
 		do
 			balken=$balken"$zeichen_down"
 	done
@@ -68,6 +45,40 @@ function displayDia() {
 	balken=$balken"|>"
 	
 	echo $balken
+}
+
+#########################
+# RAM
+#########################
+
+ram_used=$(top -l 1 | grep 'Phys' | sed -e 's/.*inactive, //;s/M.*//')
+ram_uused=$(top -l 1 | grep 'Phys' | sed -e 's/.*used, //;s/M.*//')
+ram_ges=$(system_profiler | grep "Memory: ")
+
+temp_ram_ges=$[$ram_used+$ram_uused]
+temp_ram_proz=$(echo "scale=2; $ram_used*100/$temp_ram_ges" | bc -l)
+normal_prozRam=$(echo "scale=0; $temp_ram_proz/10" | bc -l)
+
+#########################
+# DISPLAY RAM BAR
+#########################
+
+function displayRAM() {
+	
+	for ((i=1; $i <= $normal_prozRam; i++))
+		do
+			balken=$balken"$zeichen"
+	done
+
+	for ((i=$normal_prozRam; $i < 10; i++))
+		do
+			balken=$balken"$zeichen_down"
+	done
+
+	balken=$balken"|>"
+	
+	echo $balken
+	
 }
 
 #########################
@@ -80,6 +91,7 @@ uptime=$(uptime | awk '{print $3" "$4" "$5}' | sed -e 's/,$//')
 # Display all
 #########################
 echo "Uptime: "$uptime
-echo "Prozessor: "$proz "\nRam:" $ram_ges "Used:" $ram_used "Uused:" $ram_uused
-echo "CPU:" $(displayDia 1)
-echo "RAM:" $(displayDia 0)
+#echo "Prozessor: "$proz "\nRam:" $ram_ges "Used:" $ram_used "Uused:" $ram_uused
+echo "Ram:" $ram_ges "Used:" $ram_used "Uused:" $ram_uused
+echo "CPU:" $(displayCPU) $proz
+echo "RAM:" $(displayRAM) $temp_ram_proz% 

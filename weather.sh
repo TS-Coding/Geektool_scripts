@@ -24,10 +24,11 @@ if [ "$picture" != "" ]
 then
 	#download the picture
 	curl --silent $picture -o $user
-
-	#get temp
-	temp=$(curl --silent http://weather.yahoo.com/Stuttgart-Germany/GMXX0128/forecast.html?unit=c | grep 'Feels Like:' | sed -e 's/.*<dd>//;s/&.*//')
+	
 fi
+
+#get temp
+temp=$(curl --silent http://weather.yahoo.com/Stuttgart-Germany/GMXX0128/forecast.html?unit=c | grep 'Feels Like:' | sed -e 's/.*<dd>//;s/&.*//')
 
 # write 100 C if internet connection is not available 
 if [ "$temp" == "" ]

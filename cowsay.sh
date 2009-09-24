@@ -5,7 +5,7 @@
 ## COWSAY Random script
 ## Coded by: Tobias Schug
 ## E-mail: Tobiasschug@gmail.com
-##
+## Unix, Mac os X
 ###################################################
 
 #################

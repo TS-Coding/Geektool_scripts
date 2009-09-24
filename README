@@ -1,2 +1,14 @@
 Geektool Scripts
 
+#################################
+Cowsay install guide
+#################################
+
+Mac OS X: "sudo port install cowsay"
+Ubuntu: "sudo apt-get install cowsay"
+
+to start cowsay on terminal start:
+vi ~/bash_profile
+sh ../pathToCowsayScript/cowsay.sh
+	
+

@@ -11,6 +11,8 @@
 ##		Unnötige Operationen verhindert
 ##	Version 0.3
 ##		Url Fix
+##	Version 0.3.1
+##		remote sed pipe
 #####################################
 
 
@@ -30,7 +32,7 @@ then
 fi
 
 #get temp
-temp=$(curl --silent http://ca.weather.yahoo.com/forecast/GMXX1144.html | grep -A 1 'Feels Like:' | sed -e 's/.*<dd>//;s/&.*//' | sed -e 's?.*</dt>??')
+temp=$(curl --silent http://ca.weather.yahoo.com/forecast/GMXX1144.html | grep -A 1 'Feels Like:' | sed -e 's/.*<dd>//;s/&.*//;s?.*</dt>??')
 
 # write 100 C if internet connection is not available 
 if [ "$temp" == "" ]

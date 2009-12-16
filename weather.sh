@@ -13,15 +13,20 @@
 ##		Url Fix
 ##	Version 0.3.1
 ##		remote sed pipe
+##	Version 0.3.2
+##		clean code
+##
+##	Information:
+##		at: http://weather.yahoo.com you can get your weather url
+##
 #####################################
-
 
 #path where u save the picture
 user="$HOME/Documents/GeektoolScripts/weather.jpg"
 
-#default Yahoo site where u can get the right url (I coded it for °C)
-#http://weather.yahoo.com
-picture=$(curl --silent http://ca.weather.yahoo.com/forecast/GMXX1144.html | grep '<div id="weather_icon"' | sed -e "s?.*url(??; s?).*??")
+#Yahoo url 
+url="http://ca.weather.yahoo.com/forecast/GMXX1144.html"
+picture=$(curl --silent $url | grep '<div id="weather_icon"' | sed -e "s?.*url(??; s?).*??")
 
 # download only if internet connection is available
 if [ "$picture" != "" ]
@@ -32,7 +37,7 @@ then
 fi
 
 #get temp
-temp=$(curl --silent http://ca.weather.yahoo.com/forecast/GMXX1144.html | grep -A 1 'Feels Like:' | sed -e 's/.*<dd>//;s/&.*//;s?.*</dt>??')
+temp=$(curl --silent $url | grep -A 1 'Feels Like:' | sed -e 's/.*<dd>//;s/&.*//;s?.*</dt>??')
 
 # write 100 C if internet connection is not available 
 if [ "$temp" == "" ]
